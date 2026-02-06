@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" 
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.facultad.vistas.InstitutoController">
+    
+    <!-- TOP: Título y botón volver -->
+    <top>
+        <HBox spacing="10" style="-fx-padding: 10; -fx-background-color: #3498db;">
+            <Button text="← Volver" style="-fx-background-color: white; -fx-text-fill: #3498db;" 
+                    onAction="#volverAlMenu" />
+            <Label text="🏛️ GESTIÓN DE INSTITUTOS" 
+                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;" />
+        </HBox>
+    </top>
+    
+    <!-- CENTER: Formulario y tabla -->
+    <center>
+        <SplitPane dividerPositions="0.4">
+            
+            <!-- LEFT: Formulario -->
+            <VBox spacing="15" style="-fx-padding: 20;">
+                <Label text="📝 FORMULARIO DE INSTITUTO" 
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+                
+                <GridPane hgap="10" vgap="10">
+                    <Label text="Código:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                    <TextField fx:id="txtCodigo" promptText="Ej: INS-001" GridPane.rowIndex="0" GridPane.columnIndex="1" 
+                               GridPane.hgrow="ALWAYS" />
+                    
+                    <Label text="Denominación:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                    <TextField fx:id="txtDenominacion" promptText="Ej: Instituto de Tecnología" 
+                               GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                </GridPane>
+                
+                <!-- Botones CRUD -->
+                <HBox spacing="10">
+                    <Button text="➕ Guardar" fx:id="btnGuardar" style="-fx-background-color: #2ecc71; -fx-text-fill: white;" 
+                            onAction="#guardarInstituto" prefWidth="100" />
+                    <Button text="✏️ Editar" fx:id="btnEditar" style="-fx-background-color: #f39c12; -fx-text-fill: white;" 
+                            onAction="#editarInstituto" prefWidth="100" disable="true" />
+                    <Button text="🗑️ Eliminar" fx:id="btnEliminar" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" 
+                            onAction="#eliminarInstituto" prefWidth="100" disable="true" />
+                    <Button text="🔁 Limpiar" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" 
+                            onAction="#limpiarFormulario" prefWidth="100" />
+                </HBox>
+                
+                <!-- Mensajes de validación -->
+                <Label fx:id="lblMensaje" style="-fx-text-fill: #e74c3c;" wrapText="true" />
+            </VBox>
+            
+            <!-- RIGHT: Tabla de institutos -->
+            <VBox spacing="10" style="-fx-padding: 20;">
+                <Label text="📊 INSTITUTOS REGISTRADOS" 
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+                
+                <TableView fx:id="tablaInstitutos" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn text="Código" fx:id="colCodigo" prefWidth="100" />
+                        <TableColumn text="Denominación" fx:id="colDenominacion" prefWidth="300" />
+                    </columns>
+                </TableView>
+                
+                <!-- Búsqueda -->
+                <HBox spacing="10">
+                    <TextField fx:id="txtBuscar" promptText="Buscar por código o nombre..." HBox.hgrow="ALWAYS" />
+                    <Button text="🔍 Buscar" onAction="#buscarInstitutos" />
+                    <Button text="🔄 Recargar" onAction="#cargarInstitutos" />
+                </HBox>
+            </VBox>
+            
+        </SplitPane>
+    </center>
+    
+    <!-- BOTTOM: Barra de estado -->
+    <bottom>
+        <HBox style="-fx-background-color: #ecf0f1; -fx-padding: 5;">
+            <Label fx:id="lblEstado" text="Listo" style="-fx-text-fill: #7f8c8d;" />
+        </HBox>
+    </bottom>
+    
+</BorderPane>

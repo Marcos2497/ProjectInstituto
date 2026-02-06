@@ -1,0 +1,63 @@
+@startuml
+scale 1.5
+skinparam class {
+  BackgroundColor White
+  BorderColor Black
+  ArrowColor Black
+}
+hide empty members
+
+package "Modelo Facultad" {
+  class Instituto {
+    - codigo: String
+    - denominacion: String
+  }
+  
+  class Asignatura {
+    - codigo: String
+    - nombre: String
+    - descripcion: String
+  }
+  
+  class Docente {
+    - legajo: int
+    - documentoUnico: String
+    - nombres: String
+    - apellidos: String
+    - fechaNacimiento: Date
+    - direccionNotificaciones: String
+  }
+  
+  class CargoDocente {
+    - numeroCargo: int
+    - dedicacionHoras: int
+  }
+  
+  class Carrera {
+    - codigo: String
+    - nombre: String
+  }
+  
+  class AsignaturaCarrera {
+    // tabla asociativa
+  }
+}
+
+' Relaciones de composición/agregación
+Instituto "1" *-- "*" CargoDocente : tiene >
+Instituto "1" *-- "*" Asignatura : dicta >
+
+' Relaciones de asociación
+Docente "1" -- "*" CargoDocente : ocupa <
+Docente "1" -- "*" Asignatura : responsable de <
+
+' Relación muchos a muchos
+Asignatura "1" -- "*" AsignaturaCarrera
+Carrera "1" -- "*" AsignaturaCarrera
+AsignaturaCarrera .. "1" Asignatura
+AsignaturaCarrera .. "1" Carrera
+
+note "Relación N:M entre\nAsignatura y Carrera" as N1
+N1 .. AsignaturaCarrera
+
+@enduml
