@@ -17,16 +17,34 @@ public class MainController {
         }
     }
     
-    @FXML
-    private void abrirDocentes() {
-        mostrarMensaje("Próximamente", "La gestión de Docentes estará disponible en la próxima versión.");
+@FXML
+private void abrirDocentes() {
+    try {
+        // PRUEBA: Usar la versión simple primero
+        System.out.println("🔍 Intentando cargar DocenteViewSimple...");
+        MainApp.setRoot("DocenteViewSimple");
+    } catch (Exception e) {
+        System.err.println("❌ ERROR DETALLADO en abrirDocentes:");
+        e.printStackTrace();
+        
+        // Mostrar todos los detalles posibles
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error de carga");
+        alert.setHeaderText("No se pudo abrir la gestión de Docentes");
+        alert.setContentText("Tipo: " + e.getClass().getName() + "\n" +
+                           "Mensaje: " + e.getMessage() + "\n\n" +
+                           "Consulta la consola para más detalles.");
+        alert.showAndWait();
     }
+}
+
     
     @FXML
     private void abrirAsignaturas() {
         mostrarMensaje("Próximamente", "La gestión de Asignaturas estará disponible en la próxima versión.");
     }
     
+
     @FXML
     private void salir() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

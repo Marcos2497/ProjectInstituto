@@ -1,7 +1,9 @@
 package com.facultad;
 
+import com.facultad.modelo.Docente;
 import com.facultad.repositorio.Repositorio;
 import com.facultad.servicios.InstitutoService;
+import com.facultad.servicios.DocenteService;
 import com.facultad.util.HibernateUtil;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -17,6 +19,7 @@ public class MainApp extends Application {
     private static EntityManagerFactory emf;
     private static Repositorio repositorio;
     private static InstitutoService institutoService;
+    private static DocenteService docenteService;
     
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -26,7 +29,9 @@ public class MainApp extends Application {
         // 2. Crear Repositorio y Servicios
         repositorio = new Repositorio(emf);
         institutoService = new InstitutoService(repositorio);
-        
+        docenteService = new DocenteService(repositorio);
+
+
         // 3. Cargar vista principal
         scene = new Scene(loadFXML("MainView"), 1024, 768);
         
@@ -55,6 +60,10 @@ public class MainApp extends Application {
     
     public static EntityManagerFactory getEntityManagerFactory() {
         return emf;
+    }
+
+    public static DocenteService getDocenteService() {
+        return docenteService;
     }
     
     // ========== MÉTODOS PARA CAMBIAR VISTAS ==========

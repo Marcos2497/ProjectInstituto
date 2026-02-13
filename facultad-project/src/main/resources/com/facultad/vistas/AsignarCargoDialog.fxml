@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/17" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.facultad.vistas.AsignarCargoDialogController"
+      spacing="15" style="-fx-padding: 20;">
+    
+    <Label text="➕ ASIGNAR NUEVO CARGO" 
+           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+    
+    <GridPane hgap="10" vgap="15">
+        <Label text="Docente:" GridPane.rowIndex="0" GridPane.columnIndex="0" 
+               style="-fx-font-weight: bold;" />
+        <Label fx:id="lblDocente" GridPane.rowIndex="0" GridPane.columnIndex="1" 
+               style="-fx-text-fill: #3498db;" />
+        
+        <Label text="Instituto:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <ComboBox fx:id="comboInstitutos" promptText="Seleccione un instituto" 
+                  GridPane.rowIndex="1" GridPane.columnIndex="1" 
+                  GridPane.hgrow="ALWAYS" />
+        
+        <Label text="Dedicación:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <HBox spacing="5" GridPane.rowIndex="2" GridPane.columnIndex="1">
+            <Spinner fx:id="spinnerHoras" editable="true" prefWidth="100" />
+            <Label text="horas semanales" style="-fx-text-fill: #7f8c8d;" />
+        </HBox>
+    </GridPane>
+    
+    <Label fx:id="lblMensaje" wrapText="true" />
+    
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Asignar" fx:id="btnAsignar" 
+                style="-fx-background-color: #2ecc71; -fx-text-fill: white;" 
+                onAction="#asignarCargo" />
+        <Button text="Cancelar" fx:id="btnCancelar" 
+                style="-fx-background-color: #95a5a6; -fx-text-fill: white;" 
+                onAction="#cancelar" />
+    </HBox>
+    
+</VBox>

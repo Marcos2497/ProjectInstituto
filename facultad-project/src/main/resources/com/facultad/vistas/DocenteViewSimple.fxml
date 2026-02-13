@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" 
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.facultad.vistas.DocenteController">
+    
+    <top>
+        <HBox spacing="10" style="-fx-padding: 10; -fx-background-color: #2ecc71;">
+            <Button text="← Volver" style="-fx-background-color: white; -fx-text-fill: #2ecc71;" 
+                    onAction="#volverAlMenu" />
+            <Label text="👨‍🏫 GESTIÓN DE DOCENTES (BÁSICO)" 
+                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;" />
+        </HBox>
+    </top>
+    
+    <center>
+        <SplitPane dividerPositions="0.4">
+            
+            <!-- LEFT: Formulario básico -->
+            <VBox spacing="15" style="-fx-padding: 20;">
+                <Label text="📝 FORMULARIO BÁSICO" 
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+                
+                <GridPane hgap="10" vgap="10">
+                    <Label text="Documento:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                    <TextField fx:id="txtDocumento" promptText="Solo números" 
+                               GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                    
+                    <Label text="Nombres:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                    <TextField fx:id="txtNombres" promptText="Ej: Juan Carlos" 
+                               GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                    
+                    <Label text="Apellidos:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                    <TextField fx:id="txtApellidos" promptText="Ej: Pérez González" 
+                               GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                </GridPane>
+                
+                <!-- Botones CRUD -->
+                <HBox spacing="10">
+                    <Button text="➕ Guardar" fx:id="btnGuardar" 
+                            style="-fx-background-color: #2ecc71; -fx-text-fill: white;" 
+                            onAction="#guardarDocente" prefWidth="100" />
+                    <Button text="✏️ Editar" fx:id="btnEditar" 
+                            style="-fx-background-color: #f39c12; -fx-text-fill: white;" 
+                            onAction="#editarDocente" prefWidth="100" disable="true" />
+                    <Button text="🗑️ Eliminar" fx:id="btnEliminar" 
+                            style="-fx-background-color: #e74c3c; -fx-text-fill: white;" 
+                            onAction="#eliminarDocente" prefWidth="100" disable="true" />
+                    <Button text="🔁 Limpiar" 
+                            style="-fx-background-color: #95a5a6; -fx-text-fill: white;" 
+                            onAction="#limpiarFormulario" prefWidth="100" />
+                </HBox>
+                
+                <!-- Mensajes -->
+                <Label fx:id="lblMensaje" style="-fx-text-fill: #e74c3c;" wrapText="true" />
+            </VBox>
+            
+            <!-- RIGHT: Tabla básica -->
+            <VBox spacing="10" style="-fx-padding: 20;">
+                <Label text="📊 DOCENTES REGISTRADOS" 
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+                
+                <TableView fx:id="tablaDocentes" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn text="Legajo" fx:id="colLegajo" prefWidth="80" />
+                        <TableColumn text="Apellidos" fx:id="colApellidos" prefWidth="150" />
+                        <TableColumn text="Nombres" fx:id="colNombres" prefWidth="150" />
+                    </columns>
+                </TableView>
+                
+                <Button text="🔄 Recargar" onAction="#cargarDocentes" />
+            </VBox>
+            
+        </SplitPane>
+    </center>
+    
+    <bottom>
+        <HBox style="-fx-background-color: #ecf0f1; -fx-padding: 5;">
+            <Label fx:id="lblEstado" text="Estado: Listo" style="-fx-text-fill: #7f8c8d;" />
+        </HBox>
+    </bottom>
+    
+</BorderPane>
