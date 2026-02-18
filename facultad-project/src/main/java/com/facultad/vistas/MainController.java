@@ -17,34 +17,46 @@ public class MainController {
         }
     }
     
-@FXML
-private void abrirDocentes() {
-    try {
-        // PRUEBA: Usar la versión simple primero
-        System.out.println("🔍 Intentando cargar DocenteViewSimple...");
-        MainApp.setRoot("DocenteViewSimple");
-    } catch (Exception e) {
-        System.err.println("❌ ERROR DETALLADO en abrirDocentes:");
-        e.printStackTrace();
-        
-        // Mostrar todos los detalles posibles
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error de carga");
-        alert.setHeaderText("No se pudo abrir la gestión de Docentes");
-        alert.setContentText("Tipo: " + e.getClass().getName() + "\n" +
-                           "Mensaje: " + e.getMessage() + "\n\n" +
-                           "Consulta la consola para más detalles.");
-        alert.showAndWait();
+    @FXML
+    private void abrirDocentes() {
+        try {
+            System.out.println("🔍 Intentando cargar DocenteView...");
+            MainApp.setRoot("DocenteView");
+        } catch (Exception e) {
+            System.err.println("❌ ERROR: " + e.getMessage());
+            e.printStackTrace();
+            mostrarError("No se pudo abrir la gestión de Docentes", e);
+        }
     }
-}
-
     
     @FXML
     private void abrirAsignaturas() {
-        mostrarMensaje("Próximamente", "La gestión de Asignaturas estará disponible en la próxima versión.");
+        try {
+            MainApp.setRoot("AsignaturaView");
+        } catch (Exception e) {
+            mostrarMensaje("Próximamente", "La gestión de Asignaturas estará disponible en la próxima versión.");
+        }
     }
     
-
+    // ✅ NUEVO: Método para Carreras
+    @FXML
+    private void abrirCarreras() {
+        try {
+            System.out.println("🔍 Intentando cargar CarreraView...");
+            MainApp.setRoot("CarreraView");
+        } catch (Exception e) {
+            System.err.println("❌ ERROR al abrir Carreras: " + e.getMessage());
+            e.printStackTrace();
+            mostrarError("No se pudo abrir la gestión de Carreras", e);
+        }
+    }
+    
+    // ✅ NUEVO: Método para Cargos (placeholder por ahora)
+    @FXML
+    private void abrirCargos() {
+        mostrarMensaje("Próximamente", "La gestión de Cargos Docentes estará disponible pronto.");
+    }
+    
     @FXML
     private void salir() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -95,8 +107,4 @@ private void abrirDocentes() {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
-    
-    // Necesitamos agregar este método a MainApp para que funcione
-    // Agregar en MainApp.java:
-    // public static Scene getScene() { return scene; }
 }

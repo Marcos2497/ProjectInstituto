@@ -85,14 +85,14 @@
                     </columns>
                 </TableView>
                 
-                <!-- Botones para cargos -->
+                <!-- Botones para cargos 
                 <HBox spacing="10">
                     <Button text="➕ Asignar Cargo" onAction="#abrirDialogoAsignarCargo" 
                             style="-fx-background-color: #3498db; -fx-text-fill: white;" />
                     <Button text="🗑️ Quitar Cargo" fx:id="btnQuitarCargo" 
                             onAction="#quitarCargoSeleccionado" 
                             style="-fx-background-color: #e74c3c; -fx-text-fill: white;" disable="true" />
-                </HBox>
+                </HBox> -->
             </VBox>
             
             <!-- RIGHT: Tabla de docentes y búsqueda -->

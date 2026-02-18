@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" 
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.facultad.vistas.CarreraController">
+    
+    <top>
+        <HBox spacing="10" style="-fx-padding: 10; -fx-background-color: #9b59b6;">
+            <Button text="← Volver" style="-fx-background-color: white;" 
+                    onAction="#volverAlMenu" />
+            <Label text="🎓 GESTIÓN DE CARRERAS" 
+                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;" />
+        </HBox>
+    </top>
+    
+    <center>
+        <SplitPane dividerPositions="0.4">
+            <!-- PANEL IZQUIERDO: Formulario -->
+            <VBox spacing="15" style="-fx-padding: 20;">
+                <Label text="📝 FORMULARIO DE CARRERA" 
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                
+                <GridPane hgap="10" vgap="10">
+                    <Label text="Código:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                    <TextField fx:id="txtCodigo" promptText="Ej: LI" 
+                               GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                    
+                    <Label text="Nombre:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                    <TextField fx:id="txtNombre" promptText="Ej: Licenciatura en Informática" 
+                               GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                </GridPane>
+                
+                <!-- Botones CRUD -->
+                <HBox spacing="10">
+                    <Button text="➕ Guardar" 
+                            style="-fx-background-color: #2ecc71; -fx-text-fill: white;" 
+                            onAction="#guardarCarrera" prefWidth="100" />
+                    <Button text="✏️ Editar" fx:id="btnEditar" 
+                            style="-fx-background-color: #f39c12; -fx-text-fill: white;" 
+                            onAction="#editarCarrera" prefWidth="100" disable="true" />
+                    <Button text="🗑️ Eliminar" fx:id="btnEliminar" 
+                            style="-fx-background-color: #e74c3c; -fx-text-fill: white;" 
+                            onAction="#eliminarCarrera" prefWidth="100" disable="true" />
+                    <Button text="🔁 Limpiar" 
+                            style="-fx-background-color: #95a5a6; -fx-text-fill: white;" 
+                            onAction="#limpiarFormulario" prefWidth="100" />
+                </HBox>
+                
+                <Label fx:id="lblMensaje" wrapText="true" />
+            </VBox>
+            
+            <!-- PANEL DERECHO: Tabla de carreras -->
+            <VBox spacing="10" style="-fx-padding: 20;">
+                <Label text="📊 CARRERAS REGISTRADAS" 
+                       style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                
+                <!-- Filtro de búsqueda -->
+                <HBox spacing="10">
+                    <TextField fx:id="txtBuscar" promptText="Buscar por nombre..." HBox.hgrow="ALWAYS" />
+                    <Button text="🔍 Buscar" onAction="#buscarCarreras" />
+                    <Button text="🔄" onAction="#cargarCarreras" />
+                </HBox>
+                
+                <TableView fx:id="tablaCarreras" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn text="CÓDIGO" fx:id="colCodigo" prefWidth="100" />
+                        <TableColumn text="NOMBRE" fx:id="colNombre" prefWidth="350" />
+                    </columns>
+                </TableView>
+            </VBox>
+        </SplitPane>
+    </center>
+    
+    <bottom>
+        <HBox style="-fx-background-color: #ecf0f1; -fx-padding: 5;">
+            <Label fx:id="lblEstado" text="Listo" />
+        </HBox>
+    </bottom>
+</BorderPane>

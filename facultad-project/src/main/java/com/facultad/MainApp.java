@@ -4,11 +4,12 @@ import com.facultad.modelo.Docente;
 import com.facultad.repositorio.Repositorio;
 import com.facultad.servicios.InstitutoService;
 import com.facultad.servicios.DocenteService;
+import com.facultad.servicios.CarreraService;
 import com.facultad.util.HibernateUtil;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
+import javafx.fxml.FXMLLoader; 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -20,6 +21,7 @@ public class MainApp extends Application {
     private static Repositorio repositorio;
     private static InstitutoService institutoService;
     private static DocenteService docenteService;
+    private static CarreraService carreraService;
     
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -30,6 +32,7 @@ public class MainApp extends Application {
         repositorio = new Repositorio(emf);
         institutoService = new InstitutoService(repositorio);
         docenteService = new DocenteService(repositorio);
+        carreraService = new CarreraService(repositorio);
 
 
         // 3. Cargar vista principal
@@ -66,6 +69,10 @@ public class MainApp extends Application {
         return docenteService;
     }
     
+    public static CarreraService getCarreraService() {
+    return carreraService;
+}
+
     // ========== MÉTODOS PARA CAMBIAR VISTAS ==========
     
     public static void setRoot(String fxml) throws Exception {

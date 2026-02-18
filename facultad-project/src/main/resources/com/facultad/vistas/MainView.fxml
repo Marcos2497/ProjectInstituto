@@ -20,8 +20,9 @@
                 <MenuItem text="Docentes" onAction="#abrirDocentes" />
                 <MenuItem text="Asignaturas" onAction="#abrirAsignaturas" />
                 <SeparatorMenuItem />
-                <MenuItem text="Carreras" />
-                <MenuItem text="Cargos Docentes" />
+                <!-- ✅ AGREGADO: Menú Carreras -->
+                <MenuItem text="Carreras" onAction="#abrirCarreras" />
+                <MenuItem text="Cargos Docentes" onAction="#abrirCargos" />
             </Menu>
             <Menu text="Reportes">
                 <MenuItem text="Listado General" />
@@ -43,6 +44,7 @@
                        style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;" />
             </VBox>
             
+            <!-- PRIMERA FILA DE TARJETAS -->
             <HBox alignment="CENTER" spacing="20">
                 <!-- Tarjeta Institutos -->
                 <VBox alignment="CENTER" spacing="10" 
@@ -75,7 +77,30 @@
                 </VBox>
             </HBox>
             
-            <!-- Estadísticas -->
+            <!-- SEGUNDA FILA DE TARJETAS (NUEVA) -->
+            <HBox alignment="CENTER" spacing="20">
+                <!-- Tarjeta Carreras (NUEVA) -->
+                <VBox alignment="CENTER" spacing="10" 
+                      style="-fx-background-color: #9b59b6; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);"
+                      onMouseClicked="#abrirCarreras">
+                    <Label text="🎓" style="-fx-font-size: 40px;" />
+                    <Label text="CARRERAS" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;" />
+                    <Label text="Gestionar planes de estudio" 
+                           style="-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.9);" />
+                </VBox>
+                
+                <!-- Tarjeta Cargos Docentes (NUEVA) -->
+                <VBox alignment="CENTER" spacing="10" 
+                      style="-fx-background-color: #f39c12; -fx-background-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);"
+                      onMouseClicked="#abrirCargos">
+                    <Label text="📋" style="-fx-font-size: 40px;" />
+                    <Label text="CARGOS" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;" />
+                    <Label text="Asignar cargos docentes" 
+                           style="-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.9);" />
+                </VBox>
+            </HBox>
+            
+            <!-- Estadísticas (ACTUALIZADAS) -->
             <VBox alignment="CENTER" spacing="10">
                 <Label text="📊 RESUMEN DEL SISTEMA" 
                        style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
@@ -95,10 +120,16 @@
                         <Label text="42" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;" />
                         <Label text="Asignaturas" style="-fx-text-fill: #7f8c8d;" />
                     </VBox>
+                    <!-- NUEVA estadística para Carreras -->
+                    <VBox alignment="CENTER" spacing="5" 
+                          style="-fx-background-color: white; -fx-border-color: #9b59b6; -fx-border-width: 2; -fx-border-radius: 5; -fx-padding: 10;">
+                        <Label text="8" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #9b59b6;" />
+                        <Label text="Carreras" style="-fx-text-fill: #7f8c8d;" />
+                    </VBox>
                 </HBox>
             </VBox>
             
-            <!-- Acceso rápido -->
+            <!-- Acceso rápido (ACTUALIZADO) -->
             <HBox alignment="CENTER" spacing="10">
                 <Button text="Nuevo Instituto" style="-fx-background-color: #3498db; -fx-text-fill: white;" 
                         onAction="#abrirInstitutos" />
@@ -106,6 +137,9 @@
                         onAction="#abrirDocentes" />
                 <Button text="Nueva Asignatura" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" 
                         onAction="#abrirAsignaturas" />
+                <!-- NUEVO botón Carreras -->
+                <Button text="Nueva Carrera" style="-fx-background-color: #9b59b6; -fx-text-fill: white;" 
+                        onAction="#abrirCarreras" />
             </HBox>
         </VBox>
     </center>
