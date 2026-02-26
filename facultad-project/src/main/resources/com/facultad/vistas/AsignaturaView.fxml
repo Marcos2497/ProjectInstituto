@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" 
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.facultad.vistas.AsignaturaController">
+    
+    <top>
+        <HBox spacing="10" style="-fx-padding: 10; -fx-background-color: #e74c3c;">
+            <Button text="← Volver" style="-fx-background-color: white;" onAction="#volverAlMenu" />
+            <Label text="📚 GESTIÓN DE ASIGNATURAS" 
+                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;" />
+        </HBox>
+    </top>
+    
+    <center>
+        <SplitPane dividerPositions="0.4">
+            <!-- Panel izquierdo: Formulario -->
+            <VBox spacing="15" style="-fx-padding: 20;">
+                <Label text="📝 FORMULARIO" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                
+                <GridPane hgap="10" vgap="10">
+                    <Label text="Código:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                    <TextField fx:id="txtCodigo" promptText="Ej: MAT101" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                    
+                    <Label text="Nombre:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                    <TextField fx:id="txtNombre" promptText="Ej: Matemática I" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                    
+                    <Label text="Descripción:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                    <TextArea fx:id="txtDescripcion" promptText="Descripción de la asignatura" 
+                              GridPane.rowIndex="2" GridPane.columnIndex="1" prefRowCount="3" />
+                    
+                    <Label text="Instituto:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                    <ComboBox fx:id="cmbInstituto" promptText="Seleccionar instituto" 
+                              GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                    
+                    <Label text="Docente Responsable:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                    <ComboBox fx:id="cmbDocenteResponsable" promptText="Opcional" 
+                              GridPane.rowIndex="4" GridPane.columnIndex="1" />
+                </GridPane>
+                
+                <!-- Carreras asignadas -->
+                <Label text="🎓 Carreras que incluyen esta asignatura:" />
+                <ListView fx:id="listCarreras" prefHeight="100" />
+                <HBox spacing="10">
+                    <Button text="➕ Agregar Carrera" onAction="#agregarCarrera" />
+                    <Button text="➖ Quitar Carrera" fx:id="btnQuitarCarrera" onAction="#quitarCarrera" disable="true" />
+                </HBox>
+                
+                <!-- Botones CRUD -->
+                <HBox spacing="10">
+                    <Button text="➕ Guardar" style="-fx-background-color: #2ecc71;" onAction="#guardarAsignatura" prefWidth="100" />
+                    <Button text="✏️ Editar" fx:id="btnEditar" style="-fx-background-color: #f39c12;" onAction="#editarAsignatura" prefWidth="100" disable="true" />
+                    <Button text="🗑️ Eliminar" fx:id="btnEliminar" style="-fx-background-color: #e74c3c;" onAction="#eliminarAsignatura" prefWidth="100" disable="true" />
+                    <Button text="🔁 Limpiar" onAction="#limpiarFormulario" prefWidth="100" />
+                </HBox>
+                
+                <Label fx:id="lblMensaje" wrapText="true" />
+            </VBox>
+            
+            <!-- Panel derecho: Tabla y búsqueda -->
+            <VBox spacing="10" style="-fx-padding: 20;">
+                <Label text="📊 ASIGNATURAS" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                
+                <HBox spacing="10">
+                    <TextField fx:id="txtBuscar" promptText="Buscar por nombre..." HBox.hgrow="ALWAYS" />
+                    <Button text="🔍 Buscar" onAction="#buscarAsignaturas" />
+                    <Button text="🔄" onAction="#cargarAsignaturas" />
+                </HBox>
+                
+                <TableView fx:id="tablaAsignaturas" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn text="Código" fx:id="colCodigo" prefWidth="80" />
+                        <TableColumn text="Nombre" fx:id="colNombre" prefWidth="200" />
+                        <TableColumn text="Instituto" fx:id="colInstituto" prefWidth="150" />
+                        <TableColumn text="Responsable" fx:id="colResponsable" prefWidth="150" />
+                        <TableColumn text="Carreras" fx:id="colCarreras" prefWidth="80" />
+                    </columns>
+                </TableView>
+            </VBox>
+        </SplitPane>
+    </center>
+    
+    <bottom>
+        <HBox style="-fx-background-color: #ecf0f1; -fx-padding: 5;">
+            <Label fx:id="lblEstado" text="Listo" />
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -1,10 +1,13 @@
 package com.facultad;
 
+import com.facultad.modelo.CargoDocente;
 import com.facultad.modelo.Docente;
 import com.facultad.repositorio.Repositorio;
 import com.facultad.servicios.InstitutoService;
 import com.facultad.servicios.DocenteService;
 import com.facultad.servicios.CarreraService;
+import com.facultad.servicios.AsignaturaService;
+import com.facultad.servicios.CargoDocenteService;
 import com.facultad.util.HibernateUtil;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -22,6 +25,8 @@ public class MainApp extends Application {
     private static InstitutoService institutoService;
     private static DocenteService docenteService;
     private static CarreraService carreraService;
+    private static AsignaturaService asignaturaService;
+    private static CargoDocenteService cargoDocenteService;
     
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -33,7 +38,8 @@ public class MainApp extends Application {
         institutoService = new InstitutoService(repositorio);
         docenteService = new DocenteService(repositorio);
         carreraService = new CarreraService(repositorio);
-
+        asignaturaService = new AsignaturaService(repositorio);
+        cargoDocenteService = new CargoDocenteService(repositorio);
 
         // 3. Cargar vista principal
         scene = new Scene(loadFXML("MainView"), 1024, 768);
@@ -71,6 +77,15 @@ public class MainApp extends Application {
     
     public static CarreraService getCarreraService() {
     return carreraService;
+    }
+
+    public static AsignaturaService getAsignaturaService() {
+    return asignaturaService;
+    }
+
+    public static CargoDocenteService getCargoDocenteService() {
+    return cargoDocenteService;
+    
 }
 
     // ========== MÉTODOS PARA CAMBIAR VISTAS ==========
