@@ -37,10 +37,6 @@ package "Modelo Facultad" {
     - codigo: String
     - nombre: String
   }
-  
-  class AsignaturaCarrera {
-    // tabla asociativa
-  }
 }
 
 ' Relaciones de composición/agregación
@@ -51,13 +47,9 @@ Instituto "1" *-- "*" Asignatura : dicta >
 Docente "1" -- "*" CargoDocente : ocupa <
 Docente "1" -- "*" Asignatura : responsable de <
 
-' Relación muchos a muchos
-Asignatura "1" -- "*" AsignaturaCarrera
-Carrera "1" -- "*" AsignaturaCarrera
-AsignaturaCarrera .. "1" Asignatura
-AsignaturaCarrera .. "1" Carrera
+' Relación muchos a muchos (AHORA ES DIRECTA)
+Asignatura "*" -- "*" Carrera : se dicta en
 
-note "Relación N:M entre\nAsignatura y Carrera" as N1
-N1 .. AsignaturaCarrera
+note "Relación N:M entre\nAsignatura y Carrera\n( JPA crea la tabla intermedia )" as N1
 
 @enduml

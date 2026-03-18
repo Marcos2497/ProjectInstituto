@@ -4,7 +4,6 @@ import com.facultad.modelo.Asignatura;
 import com.facultad.modelo.Instituto;
 import com.facultad.modelo.Docente;
 import com.facultad.modelo.Carrera;
-import com.facultad.modelo.AsignaturaCarrera;
 import com.facultad.repositorio.Repositorio;
 import java.util.List;
 
@@ -94,10 +93,15 @@ public class AsignaturaService {
             .toList();
     }
     
-    // ========== GESTIÓN DE CARRERAS ==========
+    // ========== GESTIÓN DE CARRERAS (CORREGIDO) ==========
+    
+    /**
+     * Agrega una carrera a una asignatura
+     */
     public void agregarCarrera(Asignatura asignatura, Carrera carrera) {
         try {
             repositorio.iniciarTransaccion();
+            // Usar el método de conveniencia de la entidad
             asignatura.agregarCarrera(carrera);
             repositorio.modificar(asignatura);
             repositorio.confirmarTransaccion();
@@ -107,10 +111,14 @@ public class AsignaturaService {
         }
     }
     
+    /**
+     * Quita una carrera de una asignatura
+     */
     public void quitarCarrera(Asignatura asignatura, Carrera carrera) {
         try {
             repositorio.iniciarTransaccion();
-            asignatura.getCarreras().removeIf(ac -> ac.getCarrera().equals(carrera));
+            // Usar el método de conveniencia de la entidad
+            asignatura.quitarCarrera(carrera);
             repositorio.modificar(asignatura);
             repositorio.confirmarTransaccion();
         } catch (Exception e) {
@@ -119,10 +127,66 @@ public class AsignaturaService {
         }
     }
     
+    /**
+     * Obtiene las carreras que NO están asignadas a una asignatura
+     */
     public List<Carrera> obtenerCarrerasNoAsignadas(Asignatura asignatura) {
         List<Carrera> todasLasCarreras = repositorio.buscarTodos(Carrera.class);
+        if (asignatura == null) {
+            return todasLasCarreras;
+        }
         return todasLasCarreras.stream()
             .filter(c -> !asignatura.tieneCarrera(c))
             .toList();
+    }
+    
+    /**
+     * Obtiene las carreras asignadas a una asignatura
+     */
+    public List<Carrera> obtenerCarrerasAsignadas(Asignatura asignatura) {
+        if (asignatura == null) return List.of();
+        return asignatura.getCarreras(); // Ahora es directo, no hay AsignaturaCarrera
+    }
+
+    // ========== BÚSQUEDAS POR DOCENTE RESPONSABLE ==========
+
+    /**
+     * Busca todas las asignaturas donde un docente específico (objeto) es responsable
+     */
+    public List<Asignatura> buscarPorDocenteResponsable(Docente docente) {
+        if (docente == null) return List.of();
+        
+        List<Asignatura> todas = obtenerTodas();
+        return todas.stream()
+            .filter(a -> a.getDocenteResponsable() != null && 
+                         a.getDocenteResponsable().equals(docente))
+            .toList();
+    }
+    
+    /**
+     * Busca todas las asignaturas donde un docente (por legajo) es responsable
+     */
+    public List<Asignatura> buscarPorDocenteResponsableLegajo(Integer legajoDocente) {
+        if (legajoDocente == null) return List.of();
+        
+        List<Asignatura> todas = obtenerTodas();
+        return todas.stream()
+            .filter(a -> a.getDocenteResponsable() != null && 
+                         a.getDocenteResponsable().getLegajo().equals(legajoDocente))
+            .toList();
+    }
+    
+    /**
+     * Verifica si un docente tiene asignaturas como responsable
+     */
+    public boolean tieneAsignaturasComoResponsable(Docente docente) {
+        return !buscarPorDocenteResponsable(docente).isEmpty();
+    }
+    
+    /**
+     * Cuenta cuántas asignaturas tiene un docente como responsable
+     */
+    public int contarAsignaturasPorResponsable(Docente docente) {
+        return buscarPorDocenteResponsable(docente).size();
     }
 }

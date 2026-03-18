@@ -63,11 +63,6 @@ public class Main {
             em.persist(carrera);
             System.out.println("✓ Carrera creada: " + carrera);
             
-            // 6. Relacionar Asignatura con Carrera
-            AsignaturaCarrera asignaturaCarrera = new AsignaturaCarrera(asignatura, carrera);
-            em.persist(asignaturaCarrera);
-            System.out.println("✓ Relación Asignatura-Carrera creada");
-            
             em.getTransaction().commit();
             System.out.println("✓ Transacción completada exitosamente");
             

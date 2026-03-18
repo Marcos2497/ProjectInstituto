@@ -15,9 +15,9 @@ public class Carrera {
     @Column(name = "nombre", length = 100, nullable = false)
     private String nombre;
     
-    // Una Carrera puede tener muchas Asignaturas
-    @OneToMany(mappedBy = "carrera", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AsignaturaCarrera> asignaturas = new ArrayList<>();
+    // 🔥 CAMBIADO: De OneToMany a ManyToMany (lado inverso)
+    @ManyToMany(mappedBy = "carreras")
+    private List<Asignatura> asignaturas = new ArrayList<>();
     
     // Constructores
     public Carrera() {}
@@ -34,13 +34,15 @@ public class Carrera {
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
     
-    public List<AsignaturaCarrera> getAsignaturas() { return asignaturas; }
-    public void setAsignaturas(List<AsignaturaCarrera> asignaturas) { this.asignaturas = asignaturas; }
+    public List<Asignatura> getAsignaturas() { return asignaturas; }
+    public void setAsignaturas(List<Asignatura> asignaturas) { this.asignaturas = asignaturas; }
     
-    // Métodos de conveniencia
+    // Método de conveniencia
     public void agregarAsignatura(Asignatura asignatura) {
-        AsignaturaCarrera asignaturaCarrera = new AsignaturaCarrera(asignatura, this);
-        asignaturas.add(asignaturaCarrera);
+        if (!asignaturas.contains(asignatura)) {
+            asignaturas.add(asignatura);
+            asignatura.getCarreras().add(this);
+        }
     }
     
     @Override

@@ -18,19 +18,22 @@ public class Asignatura {
     @Column(name = "descripcion", columnDefinition = "TEXT")
     private String descripcion;
     
-    // Una Asignatura pertenece a un Instituto
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instituto_codigo", nullable = false)
     private Instituto instituto;
     
-    // Una Asignatura tiene un Docente responsable
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "docente_responsable_legajo")
     private Docente docenteResponsable;
     
-    // Una Asignatura puede ser tomada por muchas Carreras
-    @OneToMany(mappedBy = "asignatura", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AsignaturaCarrera> carreras = new ArrayList<>();
+    // 🔥 CAMBIADO: De OneToMany a ManyToMany
+    @ManyToMany
+    @JoinTable(
+        name = "asignatura_carrera",
+        joinColumns = @JoinColumn(name = "asignatura_codigo"),
+        inverseJoinColumns = @JoinColumn(name = "carrera_codigo")
+    )
+    private List<Carrera> carreras = new ArrayList<>();
     
     // Constructores
     public Asignatura() {}
@@ -57,18 +60,24 @@ public class Asignatura {
     public Docente getDocenteResponsable() { return docenteResponsable; }
     public void setDocenteResponsable(Docente docenteResponsable) { this.docenteResponsable = docenteResponsable; }
     
-    public List<AsignaturaCarrera> getCarreras() { return carreras; }
-    public void setCarreras(List<AsignaturaCarrera> carreras) { this.carreras = carreras; }
+    public List<Carrera> getCarreras() { return carreras; }
+    public void setCarreras(List<Carrera> carreras) { this.carreras = carreras; }
     
-    // Métodos de conveniencia
+    // 🔥 MÉTODOS ACTUALIZADOS (sin AsignaturaCarrera)
     public void agregarCarrera(Carrera carrera) {
-        AsignaturaCarrera asignaturaCarrera = new AsignaturaCarrera(this, carrera);
-        carreras.add(asignaturaCarrera);
+        if (!carreras.contains(carrera)) {
+            carreras.add(carrera);
+            carrera.getAsignaturas().add(this); // Mantener consistencia
+        }
+    }
+    
+    public void quitarCarrera(Carrera carrera) {
+        carreras.remove(carrera);
+        carrera.getAsignaturas().remove(this); // Mantener consistencia
     }
     
     public boolean tieneCarrera(Carrera carrera) {
-        return carreras.stream()
-            .anyMatch(ac -> ac.getCarrera().equals(carrera));
+        return carreras.contains(carrera);
     }
     
     @Override
