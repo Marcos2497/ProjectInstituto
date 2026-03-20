@@ -86,7 +86,7 @@ public class InstitutoController {
                 actualizarEstado("Instituto guardado: " + instituto.getCodigo());
                 
             } catch (Exception e) {
-                mostrarMensaje("❌ Error al guardar: " + e.getMessage(), true);
+                mostrarMensaje(" Error al guardar: " + e.getMessage(), true);
                 e.printStackTrace(); // Para debug
             }
         }
@@ -95,7 +95,7 @@ public class InstitutoController {
     @FXML
     private void editarInstituto() {
         if (institutoSeleccionado == null) {
-            mostrarMensaje("❌ No hay instituto seleccionado para editar", true);
+            mostrarMensaje(" No hay instituto seleccionado para editar", true);
             return;
         }
         
@@ -118,7 +118,7 @@ public class InstitutoController {
                 actualizarEstado("Instituto actualizado: " + codigoOriginal + " → " + institutoSeleccionado.getCodigo());
                 
             } catch (Exception e) {
-                mostrarMensaje("❌ Error al actualizar: " + e.getMessage(), true);
+                mostrarMensaje(" Error al actualizar: " + e.getMessage(), true);
                 e.printStackTrace(); // Para debug
             }
         }
@@ -127,7 +127,7 @@ public class InstitutoController {
     @FXML
     private void eliminarInstituto() {
         if (institutoSeleccionado == null) {
-            mostrarMensaje("❌ No hay instituto seleccionado para eliminar", true);
+            mostrarMensaje(" No hay instituto seleccionado para eliminar", true);
             return;
         }
         
@@ -151,7 +151,7 @@ public class InstitutoController {
                     actualizarEstado("Instituto eliminado: " + codigoEliminado);
                     
                 } catch (Exception e) {
-                    mostrarMensaje("❌ Error al eliminar: " + e.getMessage(), true);
+                    mostrarMensaje(" Error al eliminar: " + e.getMessage(), true);
                     e.printStackTrace(); // Para debug
                 }
             }
@@ -237,7 +237,7 @@ public class InstitutoController {
         btnEliminar.setDisable(true);
         
         // Solo limpiar mensaje si no hay error
-        if (!lblMensaje.getText().startsWith("❌")) {
+        if (!lblMensaje.getText().startsWith("")) {
             lblMensaje.setText("");
         }
     }
@@ -256,23 +256,23 @@ public class InstitutoController {
         String denominacion = txtDenominacion.getText().trim();
         
         if (codigo.isEmpty() || denominacion.isEmpty()) {
-            mostrarMensaje("❌ Todos los campos son obligatorios", true);
+            mostrarMensaje(" Todos los campos son obligatorios", true);
             return false;
         }
         
         if (codigo.length() > 20) {
-            mostrarMensaje("❌ El código no puede tener más de 20 caracteres", true);
+            mostrarMensaje(" El código no puede tener más de 20 caracteres", true);
             return false;
         }
         
         if (denominacion.length() > 100) {
-            mostrarMensaje("❌ La denominación no puede tener más de 100 caracteres", true);
+            mostrarMensaje(" La denominación no puede tener más de 100 caracteres", true);
             return false;
         }
         
         // Validar que no exista otro instituto con el mismo código
         if (institutoService.existeInstituto(codigo)) {
-            mostrarMensaje("❌ Ya existe un instituto con el código: " + codigo, true);
+            mostrarMensaje(" Ya existe un instituto con el código: " + codigo, true);
             return false;
         }
         
@@ -284,24 +284,24 @@ public class InstitutoController {
         String denominacion = txtDenominacion.getText().trim();
         
         if (codigo.isEmpty() || denominacion.isEmpty()) {
-            mostrarMensaje("❌ Todos los campos son obligatorios", true);
+            mostrarMensaje(" Todos los campos son obligatorios", true);
             return false;
         }
         
         if (codigo.length() > 20) {
-            mostrarMensaje("❌ El código no puede tener más de 20 caracteres", true);
+            mostrarMensaje(" El código no puede tener más de 20 caracteres", true);
             return false;
         }
         
         if (denominacion.length() > 100) {
-            mostrarMensaje("❌ La denominación no puede tener más de 100 caracteres", true);
+            mostrarMensaje(" La denominación no puede tener más de 100 caracteres", true);
             return false;
         }
         
         // Si cambió el código, verificar que no exista otro
         if (!codigo.equals(institutoSeleccionado.getCodigo()) && 
             institutoService.existeInstituto(codigo)) {
-            mostrarMensaje("❌ Ya existe otro instituto con el código: " + codigo, true);
+            mostrarMensaje(" Ya existe otro instituto con el código: " + codigo, true);
             return false;
         }
         
