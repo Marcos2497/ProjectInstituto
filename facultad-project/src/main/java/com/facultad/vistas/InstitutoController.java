@@ -12,34 +12,45 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class InstitutoController {
-    
+
     // ========== COMPONENTES FXML ==========
-    @FXML private TableView<Instituto> tablaInstitutos;
-    @FXML private TableColumn<Instituto, String> colCodigo;
-    @FXML private TableColumn<Instituto, String> colDenominacion;
-    
-    @FXML private TextField txtCodigo;
-    @FXML private TextField txtDenominacion;
-    @FXML private TextField txtBuscar;
-    
-    @FXML private Button btnGuardar;
-    @FXML private Button btnEditar;
-    @FXML private Button btnEliminar;
-    
-    @FXML private Label lblMensaje;
-    @FXML private Label lblEstado;
-    
+    @FXML
+    private TableView<Instituto> tablaInstitutos;
+    @FXML
+    private TableColumn<Instituto, String> colCodigo;
+    @FXML
+    private TableColumn<Instituto, String> colDenominacion;
+
+    @FXML
+    private TextField txtCodigo;
+    @FXML
+    private TextField txtDenominacion;
+    @FXML
+    private TextField txtBuscar;
+
+    @FXML
+    private Button btnGuardar;
+    @FXML
+    private Button btnEditar;
+    @FXML
+    private Button btnEliminar;
+
+    @FXML
+    private Label lblMensaje;
+    @FXML
+    private Label lblEstado;
+
     // ========== VARIABLES DE INSTANCIA ==========
     private InstitutoService institutoService;
     private ObservableList<Instituto> institutosObservable;
     private Instituto institutoSeleccionado;
-    
+
     // ========== INICIALIZACIÓN ==========
-    
+
     public InstitutoController() {
         this.institutoService = MainApp.getInstitutoService();
     }
-    
+
     @FXML
     public void initialize() {
         configurarTabla();
@@ -47,119 +58,141 @@ public class InstitutoController {
         configurarListeners();
         actualizarEstado("Sistema listo. " + institutosObservable.size() + " institutos cargados.");
     }
-    
+
     private void configurarTabla() {
         colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         colDenominacion.setCellValueFactory(new PropertyValueFactory<>("denominacion"));
         tablaInstitutos.setPlaceholder(new Label("No hay institutos registrados"));
     }
-    
+
     private void configurarListeners() {
         // Listener para selección en tabla
         tablaInstitutos.getSelectionModel().selectedItemProperty().addListener(
-            (obs, seleccionAnterior, seleccionNueva) -> {
-                if (seleccionNueva != null) {
-                    seleccionarInstituto(seleccionNueva);
-                } else {
-                    limpiarSeleccion();
-                }
-            }
-        );
+                (obs, seleccionAnterior, seleccionNueva) -> {
+                    if (seleccionNueva != null) {
+                        seleccionarInstituto(seleccionNueva);
+                    } else {
+                        limpiarSeleccion();
+                    }
+                });
     }
-    
+
     // ========== MÉTODOS CRUD CORREGIDOS ==========
-    
+
     @FXML
     private void guardarInstituto() {
         if (validarFormularioParaNuevo()) {
             try {
                 Instituto instituto = new Instituto(
-                    txtCodigo.getText().trim(),
-                    txtDenominacion.getText().trim()
-                );
-                
+                        txtCodigo.getText().trim(),
+                        txtDenominacion.getText().trim());
+
                 institutoService.agregarInstituto(instituto);
                 institutosObservable.add(instituto);
-                
+
                 mostrarMensaje("✅ Instituto guardado correctamente", false);
                 limpiarFormulario();
                 actualizarEstado("Instituto guardado: " + instituto.getCodigo());
-                
+
             } catch (Exception e) {
                 mostrarMensaje(" Error al guardar: " + e.getMessage(), true);
                 e.printStackTrace(); // Para debug
             }
         }
     }
-    
+
     @FXML
     private void editarInstituto() {
         if (institutoSeleccionado == null) {
             mostrarMensaje(" No hay instituto seleccionado para editar", true);
             return;
         }
-        
+
         if (validarFormularioParaEdicion()) {
             try {
                 // Guardar el código original para el mensaje
                 String codigoOriginal = institutoSeleccionado.getCodigo();
-                
+
                 // Actualizar datos
                 institutoSeleccionado.setCodigo(txtCodigo.getText().trim());
                 institutoSeleccionado.setDenominacion(txtDenominacion.getText().trim());
-                
+
                 // Persistir cambios
                 institutoService.editarInstituto(institutoSeleccionado);
-                
+
                 // Refrescar tabla
                 tablaInstitutos.refresh();
-                
+
                 mostrarMensaje("✅ Instituto actualizado correctamente", false);
-                actualizarEstado("Instituto actualizado: " + codigoOriginal + " → " + institutoSeleccionado.getCodigo());
-                
+                actualizarEstado(
+                        "Instituto actualizado: " + codigoOriginal + " → " + institutoSeleccionado.getCodigo());
+
             } catch (Exception e) {
                 mostrarMensaje(" Error al actualizar: " + e.getMessage(), true);
                 e.printStackTrace(); // Para debug
             }
         }
     }
-    
+
     @FXML
     private void eliminarInstituto() {
         if (institutoSeleccionado == null) {
-            mostrarMensaje(" No hay instituto seleccionado para eliminar", true);
+            mostrarMensaje("❌ No hay instituto seleccionado para eliminar", true);
             return;
         }
-        
+
+        // VERIFICAR SI SE PUEDE ELIMINAR
+        StringBuilder mensajeDependencias = new StringBuilder();
+        if (!institutoService.sePuedeEliminar(institutoSeleccionado, mensajeDependencias)) {
+            // Mostrar alerta de error con las dependencias detalladas
+            Alert alerta = new Alert(Alert.AlertType.ERROR);
+            alerta.setTitle("No se puede eliminar");
+            alerta.setHeaderText("El instituto tiene dependencias");
+
+            // Usar TextArea para mensajes largos
+            TextArea textArea = new TextArea(mensajeDependencias.toString());
+            textArea.setEditable(false);
+            textArea.setWrapText(true);
+            textArea.setPrefWidth(500);
+            textArea.setPrefHeight(300);
+
+            alerta.getDialogPane().setContent(textArea);
+            alerta.getDialogPane().setPrefSize(550, 350);
+
+            alerta.showAndWait();
+            return;
+        }
+
+        // Si llegamos acá, no tiene dependencias, podemos eliminar
         Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmacion.setTitle("Confirmar eliminación");
         confirmacion.setHeaderText("¿Eliminar instituto?");
-        confirmacion.setContentText("Se eliminará: " + institutoSeleccionado);
-        
+        confirmacion.setContentText("Se eliminará permanentemente:\n\n" +
+                "📌 Código: " + institutoSeleccionado.getCodigo() + "\n" +
+                "🏛️ Instituto: " + institutoSeleccionado.getDenominacion());
+
         confirmacion.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
-                    // Guardar datos para el mensaje antes de eliminar
                     String codigoEliminado = institutoSeleccionado.getCodigo();
-                    
-                    // Eliminar
+                    String nombreEliminado = institutoSeleccionado.getDenominacion();
+
                     institutoService.eliminarInstituto(institutoSeleccionado);
                     institutosObservable.remove(institutoSeleccionado);
-                    
+
                     mostrarMensaje("✅ Instituto eliminado correctamente", false);
                     limpiarFormulario();
-                    actualizarEstado("Instituto eliminado: " + codigoEliminado);
-                    
+                    actualizarEstado("Instituto eliminado: " + codigoEliminado + " - " + nombreEliminado);
+
                 } catch (Exception e) {
-                    mostrarMensaje(" Error al eliminar: " + e.getMessage(), true);
-                    e.printStackTrace(); // Para debug
+                    mostrarMensaje("Error al eliminar: " + e.getMessage(), true);
+                    e.printStackTrace();
                 }
             }
         });
     }
-    
     // ========== MÉTODOS DE NAVEGACIÓN ==========
-    
+
     @FXML
     private void volverAlMenu() {
         try {
@@ -168,66 +201,64 @@ public class InstitutoController {
             mostrarMensaje("Error al volver al menú: " + e.getMessage(), true);
         }
     }
-    
+
     @FXML
     private void buscarInstitutos() {
         String textoBusqueda = txtBuscar.getText().trim().toLowerCase();
-        
+
         if (textoBusqueda.isEmpty()) {
             cargarInstitutos();
             return;
         }
-        
+
         List<Instituto> resultados = institutosObservable.stream()
-            .filter(instituto -> 
-                instituto.getCodigo().toLowerCase().contains(textoBusqueda) ||
-                instituto.getDenominacion().toLowerCase().contains(textoBusqueda)
-            )
-            .collect(Collectors.toList());
-        
+                .filter(instituto -> instituto.getCodigo().toLowerCase().contains(textoBusqueda) ||
+                        instituto.getDenominacion().toLowerCase().contains(textoBusqueda))
+                .collect(Collectors.toList());
+
         ObservableList<Instituto> resultadosObservable = FXCollections.observableArrayList(resultados);
         tablaInstitutos.setItems(resultadosObservable);
-        
+
         // Limpiar selección si el instituto seleccionado no está en los resultados
         if (institutoSeleccionado != null && !resultados.contains(institutoSeleccionado)) {
             limpiarSeleccion();
         }
-        
+
         actualizarEstado("Búsqueda: " + resultados.size() + " resultados para '" + textoBusqueda + "'");
     }
-    
+
     @FXML
     private void cargarInstitutos() {
         try {
             List<Instituto> institutos = institutoService.obtenerTodos();
             institutosObservable = FXCollections.observableArrayList(institutos);
             tablaInstitutos.setItems(institutosObservable);
-            
+
             // Limpiar selección al recargar
             limpiarSeleccion();
-            
+
             actualizarEstado(institutos.size() + " institutos cargados");
-            
+
         } catch (Exception e) {
             mostrarMensaje("Error al cargar institutos: " + e.getMessage(), true);
         }
     }
-    
+
     // ========== MÉTODOS DE UTILIDAD ==========
-    
+
     private void seleccionarInstituto(Instituto instituto) {
         this.institutoSeleccionado = instituto;
         txtCodigo.setText(instituto.getCodigo());
         txtDenominacion.setText(instituto.getDenominacion());
-        
+
         btnGuardar.setDisable(true);
         btnEditar.setDisable(false);
         btnEliminar.setDisable(false);
-        
+
         mostrarMensaje("Editando: " + instituto, false);
         actualizarEstado("Instituto seleccionado: " + instituto.getCodigo());
     }
-    
+
     private void limpiarSeleccion() {
         this.institutoSeleccionado = null;
         txtCodigo.clear();
@@ -235,79 +266,79 @@ public class InstitutoController {
         btnGuardar.setDisable(false);
         btnEditar.setDisable(true);
         btnEliminar.setDisable(true);
-        
+
         // Solo limpiar mensaje si no hay error
         if (!lblMensaje.getText().startsWith("")) {
             lblMensaje.setText("");
         }
     }
-    
+
     @FXML
     private void limpiarFormulario() {
         tablaInstitutos.getSelectionModel().clearSelection();
         limpiarSeleccion();
         actualizarEstado("Formulario limpiado");
     }
-    
+
     // ========== VALIDACIONES MEJORADAS ==========
-    
+
     private boolean validarFormularioParaNuevo() {
         String codigo = txtCodigo.getText().trim();
         String denominacion = txtDenominacion.getText().trim();
-        
+
         if (codigo.isEmpty() || denominacion.isEmpty()) {
             mostrarMensaje(" Todos los campos son obligatorios", true);
             return false;
         }
-        
+
         if (codigo.length() > 20) {
             mostrarMensaje(" El código no puede tener más de 20 caracteres", true);
             return false;
         }
-        
+
         if (denominacion.length() > 100) {
             mostrarMensaje(" La denominación no puede tener más de 100 caracteres", true);
             return false;
         }
-        
+
         // Validar que no exista otro instituto con el mismo código
         if (institutoService.existeInstituto(codigo)) {
             mostrarMensaje(" Ya existe un instituto con el código: " + codigo, true);
             return false;
         }
-        
+
         return true;
     }
-    
+
     private boolean validarFormularioParaEdicion() {
         String codigo = txtCodigo.getText().trim();
         String denominacion = txtDenominacion.getText().trim();
-        
+
         if (codigo.isEmpty() || denominacion.isEmpty()) {
             mostrarMensaje(" Todos los campos son obligatorios", true);
             return false;
         }
-        
+
         if (codigo.length() > 20) {
             mostrarMensaje(" El código no puede tener más de 20 caracteres", true);
             return false;
         }
-        
+
         if (denominacion.length() > 100) {
             mostrarMensaje(" La denominación no puede tener más de 100 caracteres", true);
             return false;
         }
-        
+
         // Si cambió el código, verificar que no exista otro
-        if (!codigo.equals(institutoSeleccionado.getCodigo()) && 
-            institutoService.existeInstituto(codigo)) {
+        if (!codigo.equals(institutoSeleccionado.getCodigo()) &&
+                institutoService.existeInstituto(codigo)) {
             mostrarMensaje(" Ya existe otro instituto con el código: " + codigo, true);
             return false;
         }
-        
+
         return true;
     }
-    
+
     private void mostrarMensaje(String mensaje, boolean esError) {
         lblMensaje.setText(mensaje);
         if (esError) {
@@ -316,7 +347,7 @@ public class InstitutoController {
             lblMensaje.setStyle("-fx-text-fill: #27ae60;");
         }
     }
-    
+
     private void actualizarEstado(String mensaje) {
         lblEstado.setText("Estado: " + mensaje);
     }
